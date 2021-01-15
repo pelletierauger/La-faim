@@ -101,7 +101,7 @@ u = {
             + Dseq((0!15 ++ (-5!3 + [0, 5, 7 - 12] + 12)).stutter(4), inf)
         );
     var block = Demand.ar(trig, 0, Dseq([1, 0, 0, 0], inf));
-    var mod = Demand.ar(trig, 0, Dseq(((1..8)/10).stutter(1), inf));
+    var mod = Demand.ar(trig, 0, Dseq(((1..10)/10).wrapExtend(18).stutter(4), inf));
     var sig = MiPlaits.ar(note - 12,
         engine: 3,
         harm: 0.125,
@@ -149,6 +149,8 @@ u = {
 ).play(~nT, quant: [1, 0]);
 )
 
+
+// Batterie
 
 (
 var f = 220 * 9.midiratio;
