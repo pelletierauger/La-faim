@@ -309,20 +309,21 @@ x = {
 ~chill.stop;
 ~chill = Pbind(
     \instrument, \sampler,
+    \instrument, Pseq([\sampler, \samplerFlip].stutter(4), inf),
     // \dur, 8 / (122/60),
     // \dur, Pseq([Rest(8*2), Rest(3.5), 1, Rest(3.5), Rest(8)], inf),
-    \dur, Pseq([3, 2], inf),
+    \dur, Pseq([5, 5, 5, 3], inf),
     \spos, 0,
     \rel, 0.1,
     \atk, 0.001,
     \susT, ~chillScratch.duration - 0.002,
     \rel, 0.001,
     \rate, 1,
-    \amp, 1.5,
+    \amp, 2,
     \pan, 0,
     \out, 0,
     \buf, ~chillScratch
-).play(~nT, quant: [5, 0]);
+).play(~nT, quant: [1, 0]);
 )
 
 ~chillScratch.duration

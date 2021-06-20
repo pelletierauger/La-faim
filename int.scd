@@ -266,7 +266,7 @@ u = {
     sig = sig * 2 * env * 8;
         // sig = Decimator.ar(sig, rate: 3000, bits: 4) * 0.95;
         sig;
-}.play(fadeTime: 0);
+}.play(fadeTime: 30);
 });
 ~two.free;
 ~nT.sched(~nT.timeToNextBeat(quant: 1) + 0.25 + (~nT.beatDur * 0), {
@@ -297,7 +297,7 @@ u = {
     sig = sig + sig2;
     sig = LPF.ar(sig * 0.5, 2000 + (1000 * env));
     sig * 2 * env * 8;
-}.play(fadeTime: 0);
+}.play(fadeTime: 30);
     });
 )
 

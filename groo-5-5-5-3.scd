@@ -10,17 +10,16 @@ var sw = 0.01;
     // ~sPC.stop;
     // u.free;
     a = {
-        var trig = Impulse.ar((1 / (~nT.beatDur)));
-        var block = Demand.ar(trig, 0, Dseq([1, 0, 0, 0, 0].wrapExtend(18), inf));
-        var note = Demand.ar(trig, 0, ff + 12 + Dseq([0, 5, -2].stutter(5) ++ (3!3), inf));
-        var note2 = Demand.ar(trig, 0, ff + 12 + Dseq([0, 5].stutter(1), inf));
+        var beat = Impulse.ar(~nT.beatDur.reciprocal);
+        var trig = Demand.ar(beat, 0, Dseq([1, 0, 0, 0, 0].wrapExtend(18), inf));
+        var note = Demand.ar(beat, 0, ff + 12 + Dseq([0, 5, -2].stutter(5) ++ (3!3), inf));
+        var note2 = Demand.ar(beat, 0, ff + 12 + Dseq([0, 5].stutter(1), inf));
         var sig = MiPlaits.ar(note + [0, 0.1],
             engine: 3,
             harm: 0.25,
             timbre: 0.0,
-            morph: SinOsc.kr(0.1).range(0, 0.95),
             morph: 0.5,
-            trigger: trig * block,
+            trigger: trig,
             decay: 0.1,
             lpg_colour: 0,
             mul: 3);
@@ -39,7 +38,7 @@ var sw = 0.01;
 ~nT.sched(~nT.timeToNextBeat(quant: 1) + 0.25 + (~nT.beatDur * 0), {
     c.set(\gate, 0, \fadeTime, 0.5);
     c = {
-        var trig = Impulse.ar((1 / (~nT.beatDur)));
+        var trig = Impulse.ar(~nT.beatDur.reciprocal);
         var block = Demand.ar(trig, 0, Dseq([1, 0, 0, 0, 0].wrapExtend(18), inf));
         var note = Demand.ar(trig, 0, 30 + 12 + Dseq([0, -5, -2].stutter(5) ++ (-7!3), inf));
         var sig = MiPlaits.ar(note + [0, 0.1],
@@ -72,7 +71,7 @@ var sw = 0.01;
     \susT, 0.6,
     \rel, 0.001,
     \rate, Pseq([-5, -5, -5, -5, -4, -4].midiratio, inf),
-    \amp, Pseq([2, 1, 1.5, 1, 1.75, 1.5], inf) * 1.4,
+    \amp, Pseq([2, 1, 1.5, 1, 1.75, 1.5], inf) * 1.4 * 0.5,
     \pan, 0,
     \out, 0,
     \buf, ~softPluckA,
@@ -87,12 +86,12 @@ var sw = 0.01;
     \susT, 1.1,
     \rel, 0.001,
     \rate, -2.midiratio,
-    \amp, Pseq([2, 1, 2, 1, 2, 1], inf) * 0.75,
+    \amp, Pseq([2, 1, 2, 1, 2, 1], inf) * 0.75 * 0.5,
     \pan, 0,
     \out, 0,
     \buf, ~softPluckC
 ).play(~nT, quant: [1, 0]);
-u.free;
+/*u.free;
 ~nT.sched(~nT.timeToNextBeat(quant: 1) + 0.2, {
 u = {
     var trig = Impulse.ar((1 / ~nT.beatDur) * 4);
@@ -126,6 +125,35 @@ u = {
     sig = sig * 0.25;
         sig = Decimator.ar(sig, rate: 20000, bits: 6) * 0.5;
         sig = HPF.ar(sig, 2000);
+    }.play(fadeTime: 0);*/
+// });
+~hat.free;
+~nT.sched(~nT.timeToNextBeat(quant: 1) + 0.2 + (~nT.beatDur * 0), {
+    ~hat = {
+        var trig = Impulse.ar(~nT.beatDur.reciprocal);
+        var dem = Demand.ar(trig, 0, Dseq([1], inf));
+        var note = Demand.ar(trig, 0, 42 + 12 + Dseq([0].stutter(5), inf));
+        var sig = MiPlaits.ar(42 + 24 + 24 + 12 + 12,
+            engine: 9,
+            harm: 0.99,
+            timbre: 0.99,
+            morph: 0.25,
+            trigger: trig,
+            decay: 0.99,
+            lpg_colour: 0,
+            mul: 3);
+/*    sig = (sig * 0.15) + MiRings.ar(sig,
+        trig: 0,
+        pit: note,
+        struct: 0.5,
+        bright: 0.2,
+        damp: 0.65,
+        pos: 2,
+        bypass: 0);*/
+        sig = LPF.ar(sig, 6000);
+        sig = HPF.ar(sig, 200);
+        sig = sig * 0.125 * 0.07;
+        sig[1]!2;
     }.play(fadeTime: 0);
 });
 )
@@ -142,7 +170,7 @@ u = {
     \susT, ~abeille.duration - 5,
     \rel, 2,
     \rate, 1,
-    \amp, 1.85,
+    \amp, 1.05,
     \pan, 0,
     \out, 0,
     \buf, ~abeille
@@ -181,7 +209,7 @@ var ff = 54 + -12;
         bypass: 0);*/
         sig = LPF.ar(sig, 6000);
         sig = HPF.ar(sig, 200);
-        sig = sig * 0.5;
+        sig = sig * 0.5 * 0.8;
         sig[1]!2;
     }.play(fadeTime: 0);
 });
@@ -212,7 +240,7 @@ var ff = 54 + -12;
         bypass: 0);*/
         // sig = LPF.ar(sig, 6000);
         sig = HPF.ar(sig, 400);
-        sig = sig * 1.5;
+        sig = sig * 1.5 * 0.8;
         sig[1]!2;
     }.play(fadeTime: 0);
 });
